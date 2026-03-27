@@ -6,7 +6,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "boynton"
 //def name = "pandemonium"
 //def name = "trotting"
-//def name = "regatta"
+def name = "regatta"
 //def name = "ubiwerks"
 //def name = "harrington"
 //def name = "stebbins"
@@ -15,7 +15,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "toussaint"
 //def name = "depose"
 //def name = "anmol"
-def name = "wolves" // full title "Wolves At Bay"
+//def name = "wolves" // full title "Wolves At Bay"
 
 ArrayList<Object> desc_params = new ArrayList<Object>()
 desc_params.add(name)
@@ -88,12 +88,22 @@ if (piece_filename) {
 println "Trying to download "+piece_url
 
 // Load the .CSG from the disk and cache it in memory
-CSG piece  = ScriptingEngine.gitScriptRun(
-	"https://github.com/JansenSmith/downloadSTL.git", // git location of the library
-	"downloadSTL.groovy" , // file to load
-	// Parameters passed to the function
-	[piece_url]
-	)
+CSG piece
+try {
+	piece = ScriptingEngine.gitScriptRun(
+		"https://github.com/JansenSmith/downloadSTL.git", // git location of the library
+		"downloadSTL.groovy" , // file to load
+		// Parameters passed to the function
+		[piece_url]
+		)
+} catch (Exception e) {
+	println "ERROR: downloadSTL factory threw an exception for url='${piece_url}': " + e.getMessage()
+	throw e
+}
+if (piece == null) {
+	println "ERROR: downloadSTL factory returned null for url='${piece_url}'. Check the URL is valid and the release asset exists."
+	throw new Exception("downloadSTL factory returned null for url='${piece_url}'")
+}
 //println "The original piece STL is "+piece.totalZ+"mm in Z thickness"
 println String.format("The original piece STL is %.2fmm in X width, %.2fmm in Y height, %.2fmm in Z thickness", piece.totalX, piece.totalY, piece.totalZ)
 
@@ -114,20 +124,39 @@ switch(name) {
 		break
 	default:
 		println "Loading description CSG via factory"
-		desc =  (CSG)ScriptingEngine.gitScriptRun(
-										"https://github.com/JansenSmith/ArtText.git", // git location of the library
-										  "ArtText.groovy" , // file to load
-										  desc_params // send the factory the name param
-								)
+		try {
+			desc =  (CSG)ScriptingEngine.gitScriptRun(
+											"https://github.com/JansenSmith/ArtText.git", // git location of the library
+											  "ArtText.groovy" , // file to load
+											  desc_params // send the factory the name param
+									)
+		} catch (Exception e) {
+			println "ERROR: ArtText factory threw an exception for name='${name}': " + e.getMessage()
+			throw e
+		}
+		if (desc == null) {
+			println "ERROR: ArtText factory returned null for name='${name}'. Check ArtText.groovy handles this name and that the repo is reachable."
+			throw new Exception("ArtText factory returned null for name='${name}'")
+		}
 		break
 }
 
 println "Loading signature CSG via factory"
-CSG sig =  (CSG)ScriptingEngine.gitScriptRun(
-								"https://github.com/JansenSmith/JMS.git", // git location of the library
-								  "JMS.groovy" , // file to load
-								  null// no parameters (see next tutorial)
-						)
+CSG sig
+try {
+	sig =  (CSG)ScriptingEngine.gitScriptRun(
+							"https://github.com/JansenSmith/JMS.git", // git location of the library
+							  "JMS.groovy" , // file to load
+							  null// no parameters (see next tutorial)
+					)
+} catch (Exception e) {
+	println "ERROR: JMS signature factory threw an exception: " + e.getMessage()
+	throw e
+}
+if (sig == null) {
+	println "ERROR: JMS signature factory returned null. Check JMS.groovy is reachable and returns a CSG."
+	throw new Exception("JMS signature factory returned null")
+}
 
 
 println "Moving piece into position"
@@ -213,11 +242,20 @@ switch(name) {
 		break
 	default:
 		println "Loading borders CSG via factory"
-		borders =  (CSG)ScriptingEngine.gitScriptRun(
-										"https://github.com/JansenSmith/ArtBorders.git", // git location of the library
-										  "ArtBorders.groovy" , // file to load
-										  borders_params // send the factory the name param
-								)
+		try {
+			borders =  (CSG)ScriptingEngine.gitScriptRun(
+											"https://github.com/JansenSmith/ArtBorders.git", // git location of the library
+											  "ArtBorders.groovy" , // file to load
+											  borders_params // send the factory the name param
+									)
+		} catch (Exception e) {
+			println "ERROR: ArtBorders factory threw an exception for name='${name}', piece=${piece.totalX}x${piece.totalY}mm, border_width=${border_width}, border_thickness=${border_thickness}: " + e.getMessage()
+			throw e
+		}
+		if (borders == null) {
+			println "ERROR: ArtBorders factory returned null for name='${name}', piece=${piece.totalX}x${piece.totalY}mm, border_width=${border_width}, border_thickness=${border_thickness}. Check ArtBorders.groovy and its args handling."
+			throw new Exception("ArtBorders factory returned null for name='${name}'")
+		}
 		piece = piece.dumbUnion(borders)
 		addenda = addenda.toXMin(piece).toYMin(piece)
 		piece = piece.toXMin().toYMin()

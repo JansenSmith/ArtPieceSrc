@@ -6,7 +6,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "boynton"
 //def name = "pandemonium"
 //def name = "trotting"
-def name = "regatta"
+//def name = "regatta"
 //def name = "ubiwerks"
 //def name = "harrington"
 //def name = "stebbins"
@@ -16,6 +16,8 @@ def name = "regatta"
 //def name = "depose"
 //def name = "anmol"
 //def name = "wolves" // full title "Wolves At Bay"
+//def name = "gigi_tal"
+def name = "solidarityForever"
 
 ArrayList<Object> desc_params = new ArrayList<Object>()
 desc_params.add(name)
@@ -24,6 +26,7 @@ borders_params.add(name)
 
 def border_width = 4 // width is the offset outward from the painting. so with a 242mm wide painting and 4mm wide border on each side, the resultant piece will be 250mm wide
 def border_thickness = 3 // thickness is the z height thickness
+def do_rabbet = true
 
 
 //println "Clearing the Vitamins cache to make sure current geometry is being used (only run this operation when the STL has changed)"
@@ -75,6 +78,12 @@ switch (name) {
 		break
 	case "wolves":
 		piece_filename = "wolves_Front_242x206_v3.stl"
+		break
+	case "gigi_tal":
+		piece_filename = "Gigi_Tal_Front_182x242_v3.stl"
+		break
+	case "solidarityForever":
+		piece_filename = "MayDayMayPole_SolidarityForever_Front_171x242.stl"
 		break
 	default:
 		throw new Exception("Unknown option: $name")
@@ -236,6 +245,7 @@ borders_params.add(piece.totalX)
 borders_params.add(piece.totalY)
 borders_params.add(border_width)
 borders_params.add(border_thickness)
+borders_params.add(do_rabbet)
 CSG borders
 switch(name) {
 	case ["mechEng", "boynton"]:

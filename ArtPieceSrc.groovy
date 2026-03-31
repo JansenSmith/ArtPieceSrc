@@ -253,11 +253,11 @@ switch(name) {
 	default:
 		println "Loading borders CSG via factory"
 		try {
-			borders =  (CSG)ScriptingEngine.gitScriptRun(
+			(borders, backboards) = ScriptingEngine.gitScriptRun(
 											"https://github.com/JansenSmith/ArtBorders.git", // git location of the library
 											  "ArtBorders.groovy" , // file to load
 											  borders_params // send the factory the name param
-									)
+									) // always returns [border, backboards]; backboards is null when do_rabbet=false
 		} catch (Exception e) {
 			println "ERROR: ArtBorders factory threw an exception for name='${name}', piece=${piece.totalX}x${piece.totalY}mm, border_width=${border_width}, border_thickness=${border_thickness}: " + e.getMessage()
 			throw e

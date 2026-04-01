@@ -246,7 +246,7 @@ borders_params.add(piece.totalY)
 borders_params.add(border_width)
 borders_params.add(border_thickness)
 borders_params.add(do_rabbet)
-CSG borders
+CSG borders, backboards
 switch(name) {
 	case ["mechEng", "boynton"]:
 		break
@@ -326,9 +326,9 @@ base = base.setColor(javafx.scene.paint.Color.DARKGRAY)
 						//.toZMin()//move it down to the flat surface
 			})
 
-def ret = [piece, addenda] // options:
+def ret = backboards ? [piece, addenda, backboards] : [piece, addenda]
 
-println "Exporting STLs"
+println "Exporting manufacturing files"
 File outDir = new File(System.getProperty("user.home") + "/Documents/3D-prints/art/" + name)
 outDir.mkdirs()
 new CadFileExporter().generateManufacturingParts(ret, outDir)

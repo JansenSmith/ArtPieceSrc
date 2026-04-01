@@ -328,6 +328,12 @@ base = base.setColor(javafx.scene.paint.Color.DARKGRAY)
 
 def ret = [piece, addenda] // options:
 
+println "Exporting STLs"
+File outDir = new File(System.getProperty("user.home") + "/Documents/3D-prints/art/" + name)
+outDir.mkdirs()
+new CadFileExporter().generateManufacturingParts(ret, outDir)
+println "Exported to " + outDir.getAbsolutePath()
+
 println "Done!"
 
 return ret

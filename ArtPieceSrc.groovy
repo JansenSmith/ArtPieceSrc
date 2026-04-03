@@ -77,7 +77,7 @@ switch (name) {
 		piece_filename = "anmol_Front_162x242.stl"
 		break
 	case "wolves":
-		piece_filename = "wolves_Front_242x206_v3.stl"
+		piece_filename = "wolves_Front_242x206_v4.stl"
 		break
 	case "gigi_tal":
 		piece_filename = "Gigi_Tal_Front_182x242_v3.stl"

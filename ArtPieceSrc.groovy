@@ -20,6 +20,8 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "solidarityForever"
 def name = "separation"
 
+long tic = System.currentTimeMillis()
+
 ArrayList<Object> desc_params = new ArrayList<Object>()
 desc_params.add(name)
 ArrayList<Object> borders_params = new ArrayList<Object>()
@@ -339,6 +341,9 @@ new CadFileExporter().generateManufacturingParts(ret, outDir)
 println "Exported to " + outDir.getAbsolutePath()
 
 println "Done!"
+
+long toc = System.currentTimeMillis()
+println "Total elapsed: ${(toc - tic).intdiv(1000)}s"
 
 return ret
 

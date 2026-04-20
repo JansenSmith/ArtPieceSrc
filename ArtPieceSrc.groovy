@@ -17,7 +17,8 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "anmol"
 //def name = "wolves" // full title "Wolves At Bay"
 //def name = "gigi_tal"
-def name = "solidarityForever"
+//def name = "solidarityForever"
+def name = "separation"
 
 ArrayList<Object> desc_params = new ArrayList<Object>()
 desc_params.add(name)

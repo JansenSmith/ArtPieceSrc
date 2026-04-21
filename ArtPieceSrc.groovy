@@ -91,6 +91,9 @@ switch (name) {
 	case "separation":
 		piece_filename = "separation_fleshBone_Front_242x182.stl"
 		break
+	case "worcester_union":
+		piece_filename = "worcester_union_sepia_Front_195x242.stl"
+		break
 	default:
 		throw new Exception("Unknown option: $name")
 		break

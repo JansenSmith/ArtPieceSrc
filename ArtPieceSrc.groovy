@@ -33,8 +33,8 @@ def border_thickness = 3 // thickness is the z height thickness
 def do_rabbet = true
 
 
-//println "Clearing the Vitamins cache to make sure current geometry is being used (only run this operation when the STL has changed)"
-//Vitamins.clear()
+println "Clearing the Vitamins cache to make sure current geometry is being used (only run this operation when the STL has changed)"
+Vitamins.clear()
 
 String piece_url, release_url, piece_filename
 release_url = "https://github.com/JansenSmith/ArtPieceSTLs/releases/download/1.0.0"
@@ -87,6 +87,7 @@ switch (name) {
 		piece_filename = "Gigi_Tal_Front_182x242_v3.stl"
 		break
 	case "solidarityForever":
+	case "solidarityForever_isabel":
 		piece_filename = "MayDayMayPole_SolidarityForever_Front_171x242.stl"
 		break
 	case "separation":

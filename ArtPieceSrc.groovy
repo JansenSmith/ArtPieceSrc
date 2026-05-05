@@ -19,6 +19,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "gigi_tal"
 //def name = "solidarityForever"
 //def name = "separation"
+//def name = "solidarityForever_isabel"
 def name = "worcester_union"
 
 long tic = System.currentTimeMillis()

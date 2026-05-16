@@ -20,7 +20,8 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "solidarityForever"
 //def name = "separation"
 //def name = "solidarityForever_isabel"
-def name = "horsesDontKnow_union"
+//def name = "horsesDontKnow_union"
+def name = "bisonCouche"
 
 long tic = System.currentTimeMillis()
 
@@ -96,6 +97,9 @@ switch (name) {
 		break
 	case "horsesDontKnow_union":
 		piece_filename = "horsesDontKnow_union_sepia_Front_195x242.stl"
+		break
+	case "bisonCouche":
+		piece_filename = "bisonCouche_Front_242x175.stl"
 		break
 	default:
 		throw new Exception("Unknown option: $name")

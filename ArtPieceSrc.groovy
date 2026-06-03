@@ -15,13 +15,13 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "toussaint"
 //def name = "depose"
 //def name = "anmol"
-//def name = "wolves" // full title "Wolves At Bay"
+def name = "wolves" // full title "Wolves At Bay"
 //def name = "gigi_tal"
 //def name = "solidarityForever"
 //def name = "separation"
 //def name = "solidarityForever_isabel"
 //def name = "horsesDontKnow_union"
-def name = "bisonCouche"
+//def name = "bisonCouche"
 
 long tic = System.currentTimeMillis()
 
@@ -96,7 +96,7 @@ switch (name) {
 		piece_filename = "separation_fleshBone_Front_242x182.stl"
 		break
 	case "horsesDontKnow_union":
-		piece_filename = "horsesDontKnow_union_sepia_Front_195x242.stl"
+		piece_filename = "worcester_union_sepia_Front_195x242.stl"
 		break
 	case "bisonCouche":
 		piece_filename = "bisonCouche_Front_242x175.stl"

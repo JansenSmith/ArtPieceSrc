@@ -53,7 +53,7 @@ switch (name) {
 		piece_filename = "Pandemonium_Front_236x156.stl"
 		break
 	case "trotting":
-		piece_filename = "Trotting_Front_242x139.stl"
+		piece_filename = "trotting_Front_242x139.stl"
 		break
 	case "regatta":
 		piece_filename = "LakeQuinsigamond1868_Front_176x242.stl"

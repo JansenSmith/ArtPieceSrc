@@ -10,7 +10,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "ubiwerks"
 //def name = "harrington"
 //def name = "stebbins"
-//def name = "fight" // full title "Fight Them"
+//def name = "fightThem" // full title "Fight Them"
 //def name = "jankal" // full title "Memories of Kaua'i"
 //def name = "toussaint"
 //def name = "depose"
@@ -67,7 +67,7 @@ switch (name) {
 	case "stebbins":
 		piece_filename = "Stebbins_Worcester_Front_242x132.stl"
 		break
-	case "fight":
+	case "fightThem":
 		piece_filename = "Fight_Front_200x133.stl"
 		break
 	case "jankal":
@@ -133,7 +133,7 @@ if (piece == null) {
 println String.format("The original piece STL is %.2fmm in X width, %.2fmm in Y height, %.2fmm in Z thickness", piece.totalX, piece.totalY, piece.totalZ)
 
 switch(name) {
-	case "fight":
+	case "fightThem":
 		max_dim = Math.max(piece.totalX,piece.totalY)
 		println "Resizing from "+max_dim+"mm to standard 242mm (250mm with standard borders)"
 		dim_scale = 242/max_dim
@@ -241,7 +241,7 @@ switch(name) {
 	case "harrington":
 		solid_space = 0.32
 		break
-	case "fight":
+	case "fightThem":
 		solid_space = 0.08
 		break
 	default:

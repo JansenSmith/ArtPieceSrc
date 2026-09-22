@@ -7,6 +7,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "pandemonium"
 //def name = "trotting"
 //def name = "regatta"
+def name = "regatta_triangles" // triangle study of "Worcester's Regatta Roots"
 //def name = "ubiwerks"
 //def name = "harrington"
 //def name = "stebbins"
@@ -15,7 +16,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "toussaint"
 //def name = "depose"
 //def name = "anmol"
-def name = "wolves" // full title "Wolves At Bay"
+//def name = "wolves" // full title "Wolves At Bay"
 //def name = "gigi_tal"
 //def name = "solidarityForever"
 //def name = "separation"
@@ -57,6 +58,9 @@ switch (name) {
 		break
 	case "regatta":
 		piece_filename = "LakeQuinsigamond1868_Front_176x242.stl"
+		break
+	case "regatta_triangles":
+		piece_filename = "regatta_triangles_Front_176x242.stl"
 		break
 	case "ubiwerks":
 		piece_filename = "SteamboatWillie_Front_242x195.stl"
@@ -194,6 +198,12 @@ switch(name) {
 		desc = desc.toZMin()
 		desc = desc.mirrorx().movex(piece.totalX)
 		desc = desc.movey(20)
+		break
+	case "regatta_triangles":
+		println "Moving description into position"
+		desc = desc.toZMin()
+		desc = desc.mirrorx().movex(piece.totalX)
+		desc = desc.movey(30) // 20 puts the text into the signature on this piece
 		break
 	case "pandemonium":
 		break

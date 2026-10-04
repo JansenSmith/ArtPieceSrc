@@ -6,8 +6,8 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "boynton"
 //def name = "pandemonium"
 //def name = "trotting"
-//def name = "regatta"
-def name = "regatta_triangles" // triangle study of "Worcester's Regatta Roots"
+def name = "regatta" // "Worcester's Regatta Roots"
+//def name = "regatta_triangles" // triangle study of "Worcester's Regatta Roots"
 //def name = "ubiwerks"
 //def name = "harrington"
 //def name = "stebbins"
@@ -57,7 +57,7 @@ switch (name) {
 		piece_filename = "trotting_Front_242x139.stl"
 		break
 	case "regatta":
-		piece_filename = "LakeQuinsigamond1868_Front_176x242.stl"
+		piece_filename = "regatta_Front_176x242.stl" // modernized 2026-09-15 export; legacy asset was LakeQuinsigamond1868_Front_176x242.stl
 		break
 	case "regatta_triangles":
 		piece_filename = "regatta_triangles_Front_176x242.stl"
@@ -193,13 +193,13 @@ piece = piece.toXMin().toYMin().toZMin()
 
 //println "Moving description into position"
 switch(name) {
-	case ["regatta", "toussaint"]:
+	case "toussaint":
 		println "Moving description into position"
 		desc = desc.toZMin()
 		desc = desc.mirrorx().movex(piece.totalX)
 		desc = desc.movey(20)
 		break
-	case "regatta_triangles":
+	case ["regatta", "regatta_triangles"]:
 		println "Moving description into position"
 		desc = desc.toZMin()
 		desc = desc.mirrorx().movex(piece.totalX)

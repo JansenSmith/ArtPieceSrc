@@ -36,9 +36,12 @@ borders_params.add(name)
 def border_width = 4 // width is the offset outward from the painting. so with a 242mm wide painting and 4mm wide border on each side, the resultant piece will be 250mm wide
 def border_thickness = 3 // thickness is the z height thickness
 def do_rabbet = true
-def corner_radius = 4 // mm radius on the four outward corners of a standalone panel; 0 disables
-// 4mm is the house standard: ArtBorders rounds every bordered piece with a cylinder of
-// radius == border_width, and border_width is 4 (ArtBorders.groovy, the corner-cylinder union).
+def corner_radius = 3 // mm radius on the four outward corners of a standalone panel; 0 disables
+// The house standard is 4mm -- ArtBorders rounds every bordered piece with a cylinder of
+// radius == border_width, and border_width is 4 (ArtBorders.groovy, the corner-cylinder
+// union).  3mm here because the standard is tied to the border, not to panel size, and on
+// a 99mm panel 4mm reads like 8mm would on the 200mm one.  Artist chose 3 (2026-10-13),
+// after seeing 6 and 4 on the panel.
 
 // A standalone panel: no border, no addenda, no base slab -- the painting IS the whole object.
 // bread4all was the first such piece and never went through this script; this is the branch for it.

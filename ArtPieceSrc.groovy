@@ -23,7 +23,8 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "solidarityForever_isabel"
 //def name = "horsesDontKnow_union"
 //def name = "bisonCouche"
-def name = "pumpkin_light_core" // backlit art-nouveau pumpkin panel; standalone, no border/addenda
+//def name = "pumpkin_light_core" // backlit art-nouveau pumpkin panel; standalone, no border/addenda
+def name = "pumpkin_nouveau_4up" // the same panel at 99mm, four to a bed
 
 long tic = System.currentTimeMillis()
 
@@ -39,7 +40,7 @@ def corner_radius = 6 // mm radius on the four outward corners of a standalone p
 
 // A standalone panel: no border, no addenda, no base slab -- the painting IS the whole object.
 // bread4all was the first such piece and never went through this script; this is the branch for it.
-def standalone = (name in ["pumpkin_light_core"])
+def standalone = (name in ["pumpkin_light_core", "pumpkin_nouveau_4up"])
 String local_stl = null // set by the switch below for pieces whose STL is not on the release
 
 
@@ -116,6 +117,11 @@ switch (name) {
 		// local only -- this piece has no release asset
 		local_stl = System.getProperty("user.home") + "/Documents/3D-prints/art/pumpkin_light_core_Front_200x200.stl"
 		break
+	case "pumpkin_nouveau_4up":
+		// 99mm square: the size at which FOUR fit the 256mm bed with the prime tower
+		// in the calibration band (artist 2026-10-13).  Local only, same as above.
+		local_stl = System.getProperty("user.home") + "/Documents/3D-prints/art/pumpkin_nouveau_4up/pumpkin_nouveau_4up_Front_99x99.stl"
+		break
 	default:
 		throw new Exception("Unknown option: $name")
 		break
@@ -171,6 +177,7 @@ switch(name) {
 
 CSG desc
 switch(name) {
+	case "pumpkin_nouveau_4up":
 	case "pumpkin_light_core": // standalone: no description text
 	case "pandemonium":
 		break
@@ -230,6 +237,7 @@ switch(name) {
 		desc = desc.mirrorx().movex(piece.totalX)
 		desc = desc.movey(30) // 20 puts the text into the signature on this piece
 		break
+	case "pumpkin_nouveau_4up":
 	case "pumpkin_light_core": // standalone: nothing to position
 	case "pandemonium":
 		break
@@ -243,6 +251,7 @@ switch(name) {
 
 println "Moving signature into position"
 switch(name) {
+	case "pumpkin_nouveau_4up":
 	case "pumpkin_light_core": // standalone: no signature
 		break
 	case "pandemonium":
@@ -257,6 +266,7 @@ switch(name) {
 
 CSG addenda
 switch(name) {
+	case "pumpkin_nouveau_4up":
 	case "pumpkin_light_core": // standalone: no addenda
 		addenda = null
 		break
@@ -308,6 +318,7 @@ borders_params.add(border_thickness)
 borders_params.add(do_rabbet)
 CSG borders, backboards
 switch(name) {
+	case "pumpkin_nouveau_4up":
 	case "pumpkin_light_core": // standalone: no border, no rabbet
 	case ["mechEng", "boynton"]:
 		break

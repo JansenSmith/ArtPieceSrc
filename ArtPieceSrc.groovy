@@ -6,7 +6,7 @@ import eu.mihosoft.vrl.v3d.*
 //def name = "boynton"
 //def name = "pandemonium"
 //def name = "trotting"
-def name = "regatta" // "Worcester's Regatta Roots"
+//def name = "regatta" // "Worcester's Regatta Roots"
 //def name = "regatta_triangles" // triangle study of "Worcester's Regatta Roots"
 //def name = "ubiwerks"
 //def name = "harrington"
@@ -23,6 +23,7 @@ def name = "regatta" // "Worcester's Regatta Roots"
 //def name = "solidarityForever_isabel"
 //def name = "horsesDontKnow_union"
 //def name = "bisonCouche"
+def name = "pumpkin_light_core" // backlit art-nouveau pumpkin panel; standalone, no border/addenda
 
 long tic = System.currentTimeMillis()
 
@@ -34,6 +35,12 @@ borders_params.add(name)
 def border_width = 4 // width is the offset outward from the painting. so with a 242mm wide painting and 4mm wide border on each side, the resultant piece will be 250mm wide
 def border_thickness = 3 // thickness is the z height thickness
 def do_rabbet = true
+def corner_radius = 6 // mm radius on the four outward corners of a standalone panel; 0 disables
+
+// A standalone panel: no border, no addenda, no base slab -- the painting IS the whole object.
+// bread4all was the first such piece and never went through this script; this is the branch for it.
+def standalone = (name in ["pumpkin_light_core"])
+String local_stl = null // set by the switch below for pieces whose STL is not on the release
 
 
 println "Clearing the Vitamins cache to make sure current geometry is being used (only run this operation when the STL has changed)"
@@ -105,6 +112,10 @@ switch (name) {
 	case "bisonCouche":
 		piece_filename = "bisonCouche_Front_242x175.stl"
 		break
+	case "pumpkin_light_core":
+		// local only -- this piece has no release asset
+		local_stl = System.getProperty("user.home") + "/Documents/3D-prints/art/pumpkin_light_core_Front_200x200.stl"
+		break
 	default:
 		throw new Exception("Unknown option: $name")
 		break
@@ -114,10 +125,20 @@ if (piece_filename) {
 	piece_url = release_url + "/" + piece_filename
 }
 
-println "Trying to download "+piece_url
-
 // Load the .CSG from the disk and cache it in memory
 CSG piece
+if (local_stl) {
+	println "Loading piece STL from local file: "+local_stl
+	File localFile = new File(local_stl)
+	if (!localFile.exists()) {
+		throw new Exception("Local STL not found: "+local_stl)
+	}
+	piece = Vitamins.get(localFile)
+	if (piece == null) {
+		throw new Exception("Vitamins.get returned null for local STL: "+local_stl)
+	}
+} else {
+println "Trying to download "+piece_url
 try {
 	piece = ScriptingEngine.gitScriptRun(
 		"https://github.com/JansenSmith/downloadSTL.git", // git location of the library
@@ -132,6 +153,7 @@ try {
 if (piece == null) {
 	println "ERROR: downloadSTL factory returned null for url='${piece_url}'. Check the URL is valid and the release asset exists."
 	throw new Exception("downloadSTL factory returned null for url='${piece_url}'")
+}
 }
 //println "The original piece STL is "+piece.totalZ+"mm in Z thickness"
 println String.format("The original piece STL is %.2fmm in X width, %.2fmm in Y height, %.2fmm in Z thickness", piece.totalX, piece.totalY, piece.totalZ)
@@ -149,6 +171,7 @@ switch(name) {
 
 CSG desc
 switch(name) {
+	case "pumpkin_light_core": // standalone: no description text
 	case "pandemonium":
 		break
 	default:
@@ -170,8 +193,9 @@ switch(name) {
 		break
 }
 
-println "Loading signature CSG via factory"
 CSG sig
+if (!standalone) {
+println "Loading signature CSG via factory"
 try {
 	sig =  (CSG)ScriptingEngine.gitScriptRun(
 							"https://github.com/JansenSmith/JMS.git", // git location of the library
@@ -185,6 +209,7 @@ try {
 if (sig == null) {
 	println "ERROR: JMS signature factory returned null. Check JMS.groovy is reachable and returns a CSG."
 	throw new Exception("JMS signature factory returned null")
+}
 }
 
 
@@ -205,6 +230,7 @@ switch(name) {
 		desc = desc.mirrorx().movex(piece.totalX)
 		desc = desc.movey(30) // 20 puts the text into the signature on this piece
 		break
+	case "pumpkin_light_core": // standalone: nothing to position
 	case "pandemonium":
 		break
 	default:
@@ -217,6 +243,8 @@ switch(name) {
 
 println "Moving signature into position"
 switch(name) {
+	case "pumpkin_light_core": // standalone: no signature
+		break
 	case "pandemonium":
 		sig = sig.toZMin().movex(piece.totalX).movex(-5)
 		break
@@ -229,6 +257,9 @@ switch(name) {
 
 CSG addenda
 switch(name) {
+	case "pumpkin_light_core": // standalone: no addenda
+		addenda = null
+		break
 	case "pandemonium":
 		addenda = sig
 		break
@@ -245,6 +276,8 @@ switch(name) {
 //base = base.difference(sig)//.movez(solid_space))
 //println "The base is "+base.totalZ+"mm in height"
 
+CSG base = null
+if (!standalone) {
 println "Creating a base that contains the addenda"
 def solid_space = 0.16
 switch(name) {
@@ -257,7 +290,7 @@ switch(name) {
 	default:
 		break
 }
-def base = new Cube(piece.totalX,piece.totalY,addenda.totalZ + solid_space).toCSG()
+base = new Cube(piece.totalX,piece.totalY,addenda.totalZ + solid_space).toCSG()
 				.toXMin().toYMin().toZMin()
 base = base.difference(addenda)//.movez(solid_space))
 println "The base is "+base.totalZ+"mm in Z thickness"
@@ -265,6 +298,7 @@ println "The base is "+base.totalZ+"mm in Z thickness"
 println "Adding the base to the piece"
 piece = piece.dumbUnion(base.toZMax())
 				.toZMin()
+}
 
 println "Adding borders via factory"
 borders_params.add(piece.totalX)
@@ -274,6 +308,7 @@ borders_params.add(border_thickness)
 borders_params.add(do_rabbet)
 CSG borders, backboards
 switch(name) {
+	case "pumpkin_light_core": // standalone: no border, no rabbet
 	case ["mechEng", "boynton"]:
 		break
 	default:
@@ -302,6 +337,26 @@ switch(name) {
 //piece = piece.difference(combin)
 //piece = piece.difference(sig)
 
+if (standalone && corner_radius > 0) {
+	println "Rounding the panel corners to "+corner_radius+"mm radius"
+	double px = piece.totalX, py = piece.totalY, pz = piece.totalZ
+	double r = corner_radius
+	if (r > px/2 || r > py/2) {
+		throw new Exception("corner_radius "+r+"mm exceeds half the panel ("+px+"x"+py+"mm)")
+	}
+	// One rounded-square tool, then ONE intersect -- the piece mesh is ~2M triangles and
+	// every extra boolean against it is a real risk (see bowlerstudio.md on the 5.0.5 engine).
+	CSG tool = new Cube(px - 2*r, py, pz*3).toCSG().toXMin().toYMin().toZMin().movex(r)
+	tool = tool.union(new Cube(px, py - 2*r, pz*3).toCSG().toXMin().toYMin().toZMin().movey(r))
+	for (double cx : [r, px - r]) {
+		for (double cy : [r, py - r]) {
+			tool = tool.union(new Cylinder(r, r, pz*3, 64).toCSG().toZMin().movex(cx).movey(cy))
+		}
+	}
+	piece = piece.intersect(tool.movez(-pz))
+	piece = piece.toXMin().toYMin().toZMin()
+}
+
 println String.format("The resultant piece is %.2fmm in X width, %.2fmm in Y height, %.2fmm in Z thickness", piece.totalX, piece.totalY, piece.totalZ)
 
 println "Setting CSG attributes"
@@ -325,6 +380,7 @@ if (desc) {
 				})
 }
 
+if (sig) {
 sig = sig.setColor(javafx.scene.paint.Color.DARKRED)
 			.setName(name+"_sig")
 			.addAssemblyStep(0, new Transform())
@@ -334,6 +390,9 @@ sig = sig.setColor(javafx.scene.paint.Color.DARKRED)
 						//.toZMin()//move it down to the flat surface
 			})
 
+}
+
+if (addenda) {
 addenda = addenda.setColor(javafx.scene.paint.Color.DARKRED)
 			.setName(name+"_addenda")
 			.addAssemblyStep(0, new Transform())
@@ -343,6 +402,9 @@ addenda = addenda.setColor(javafx.scene.paint.Color.DARKRED)
 						//.toZMin()//move it down to the flat surface
 			})
 			
+}
+
+if (base) {
 base = base.setColor(javafx.scene.paint.Color.DARKGRAY)
 			.setName(name+"_base")
 			.addAssemblyStep(0, new Transform())
@@ -352,7 +414,9 @@ base = base.setColor(javafx.scene.paint.Color.DARKGRAY)
 						//.toZMin()//move it down to the flat surface
 			})
 
-def ret = backboards ? [piece, addenda, backboards] : [piece, addenda]
+}
+
+def ret = standalone ? [piece] : (backboards ? [piece, addenda, backboards] : [piece, addenda])
 
 println "Exporting manufacturing files"
 File outDir = new File(System.getProperty("user.home") + "/Documents/3D-prints/art/" + name)
